@@ -2,6 +2,7 @@ package hr.algebra.dal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name="country")
@@ -10,10 +11,11 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-    @NotEmpty(message = "Code is required")
+    @NotEmpty(message = "Code is required!")
+    @Pattern(regexp = "^[A-Z]{2}" , message="Only 2 charachters, no numbers and all letters must be upper!")
     @Column(name="code")
     private String code;
-    @NotEmpty(message = "Name is required")
+    @NotEmpty(message = "Name is required!")
     @Column(name="name")
     private String name;
 

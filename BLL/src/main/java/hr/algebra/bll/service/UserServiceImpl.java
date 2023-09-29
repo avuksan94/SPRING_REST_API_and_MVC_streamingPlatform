@@ -38,6 +38,21 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findByEmail(String email) {
+        List<User> allDBUsers = _userRepository.findAll();
+        Optional<User> optionalUser = allDBUsers.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
+
+        if (optionalUser.isPresent()) {
+            User foundUser = optionalUser.get();
+            return foundUser;
+        } else {
+            throw new CustomNotFoundException("User does not exist in the database!");
+        }
+    }
+
+    @Override
     public User save(User user) {
         return _userRepository.save(user);
     }
@@ -45,5 +60,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteByUsername(String username) {
         _userRepository.deleteByUserName(username);
+    }
+
+    @Override
+    public List<User> getByKeyword(String keyword) {
+        return _userRepository.findByKeyword(keyword);
     }
 }

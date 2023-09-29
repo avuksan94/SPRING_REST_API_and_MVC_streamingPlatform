@@ -2,6 +2,7 @@ package hr.algebra.dal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table(name="image")
@@ -11,7 +12,8 @@ public class Image {
     @Column(name="id")
     private int id;
 
-    @NotEmpty(message = "Content is required")
+    @NotEmpty(message = "Content is required!")
+    @URL(message = "Must be URL link!")
     @Column(name="content")
     private String content;
 

@@ -47,4 +47,9 @@ public class CountryServiceImpl implements CountryService{
     public void deleteById(int id) {
         _countryRepository.deleteById(id);
     }
+
+    @Override
+    public List<Country> getByKeyword(String keyword) {
+        return _countryRepository.findByKeyword(keyword);
+    }
 }

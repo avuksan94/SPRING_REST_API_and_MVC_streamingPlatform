@@ -83,6 +83,11 @@ public class TagServiceImpl implements TagService {
         return newTag;
     }
 
+    @Override
+    public List<Tag> getByKeyword(String keyword){
+        return _tagRepository.findByKeyword(keyword);
+    }
+
     /*
     In Java, Optional<T> is a container that may or may not contain a non-null value of type T.
     By using Optional, you can better deal with cases that might result in null values without

@@ -1,13 +1,31 @@
 package hr.algebra.bll.blModels;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 import java.util.Set;
 
 public class UserModel {
+    @Id
+    @NotEmpty(message = "Username is required")
     private String username;
+
+    @NotEmpty(message = "First name is required")
     private String firstName;
+
+    @NotEmpty(message = "Last name is required")
     private String lastName;
+    @NotEmpty(message = "Email name is required")
+    @Email(message = "Please provide a valid email address.")
     private String email;
+
+    @NotEmpty(message = "Password is required")
     private String password;
+
+    @NotEmpty(message = "Phone number is required")
+    @Pattern(regexp = "^\\+(?:[0-9]●?){6,14}[0-9]$", message = "Please provide a valid phone number.")
     private String phone;
     private int countryOfResidenceId;
     private Set<String> roles;

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Streamify++ Video</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link rel="stylesheet" th:href="@{/css/streaming.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body class="d-flex flex-column">
+<!-- Navigation-->
+<!-- Mush have placeholder present on every page(jQuery needs to load before bootstrap) -->
+<div id="navbar-placeholder"></div>
+<script>
+    $(document).ready(function(){
+        $("#navbar-placeholder").load("/sharedElements/navbar.html");
+    });
+</script>
+
+<!-- Section -->
+<section class="py-5 tags-section-gradient">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="text-white mb-4">
+            <h2 class="display-4">Video Info</h2>
+        </div>
+        <div class="card rounded shadow mb-5">
+            <div class="card-body">
+                <!-- Display video -->
+                <iframe class="mb-4 rounded" width="100%" height="480" th:src="${'https://www.youtube.com/embed/' + video.streamingUrl.split('v=')[1].split('&')[0]}" frameborder="0" allowfullscreen></iframe>
+
+                <!-- Display video details -->
+                <h3 class="card-title mb-3" th:text="${video.name}">Video Title</h3>
+                <p class="card-text mb-3" th:text="${video.description}">Some description about the video.</p>
+
+                <!-- Button to display more details -->
+                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#videoDetailsModal">More details</button>
+            </div>
+        </div>
+
+        <!-- Back to videos button -->
+        <div class="d-flex justify-content-center mb-4">
+            <a th:href="@{/videos/list}" class="btn custom-gradient text-white btn-lg">Back to videos</a>
+        </div>
+
+        <!-- Modal for extra details -->
+        <div class="modal fade" id="videoDetailsModal" tabindex="-1" aria-labelledby="videoDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="videoDetailsModalLabel">Video Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="card-text mb-2" th:text="'Uploaded on: ' + ${video.createdAt}">Uploaded on:</p>
+                        <p class="card-text mb-2" th:text="'Genre: ' + ${genre != null ? genre.name : 'Genre Not Set'}">Genre Information</p>
+                        <p class="card-text mb-2" th:text="'Duration: ' + ${video.totalSeconds}">Duration of the video.</p>
+                        <div class="my-3">
+                            <img th:src="${image != null ? image.content : 'Image Not Set'}" class="img-fluid rounded">
+                        </div>
+                        <h5>Tags:</h5>
+                        <ul>
+                            <li th:each="tag : ${tags}" th:text="${tag.name}"></li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/videos/showFormForUpdateVideo(videoId=${video.id})}" class="btn custom-gradient text-white btn-sm">
+                            <i class="bi bi-pen"></i>
+                        </a>
+                        <a th:href="@{/videos/delete(videoId=${video.id})}" class="btn btn-danger btn-sm" onclick=" if (!(confirm('Are you sure you want to delete this video?'))) return false">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer-->
+<footer class="py-5 custom-gradient mt-auto">
+    <div class="container"><p class="m-0 text-center text-white">avuksan &copy; Streamify++ 2023</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+</body>
+</html>

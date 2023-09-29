@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Streamify++ Videos</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link rel="stylesheet" th:href="@{/css/streaming.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body class="d-flex flex-column">
+<!-- Navigation-->
+<!-- Mush have placeholder present on every page(jQuery needs to load before bootstrap) -->
+<div id="navbar-placeholder"></div>
+<script>
+    // Define these outside of $(document).ready
+    var selectedImage = null;
+
+    function selectImage(imageId, element) {
+        document.getElementById('ImageId').value = imageId;
+
+        if (selectedImage != null) {
+            selectedImage.classList.remove('selected');
+        }
+
+        element.classList.add('selected');
+        selectedImage = element;
+    }
+
+    function viewImage(imageSrc) {
+        document.getElementById('modalImage').src = imageSrc;
+        $('#imageModal').modal('show');
+    }
+
+    function handleImageClick(element) {
+        var imageId = element.getAttribute('data-image-id');
+        var imageContent = element.getAttribute('data-image-content');
+        selectImage(imageId, element);
+        viewImage(imageContent);
+    }
+
+    $(document).ready(function() {
+        $("#navbar-placeholder").load("/sharedElements/navbar.html");
+
+        // By default, I want the first image to be selected if the user doesn't select any image
+        var firstImageElement = document.querySelector('.scrollable-gallery img');
+        if (firstImageElement) {
+            selectImage(firstImageElement.id.replace('image', ''), firstImageElement);
+            //viewImage(firstImageElement.src);
+        }
+    });
+</script>
+
+<!-- Section-->
+<section class="py-5 tags-section-gradient">
+    <div class="container px-4 px-lg-5 mt-5">
+        <p class="h4 text-white mb-4">Video Info</p>
+
+        <form action="#" th:action="@{/videos/save}"
+              th:object="${video}" method = "POST">
+
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" id="ImageId" name="imageId" />
+
+            <p th:errors="*{name}"></p>
+            <input type="text" th:field="*{name}"
+                   class="form-control mb-4 w-25" placeholder="Name">
+
+            <p th:errors="*{description}"></p>
+            <input type="text" th:field="*{description}"
+                   class="form-control mb-4 w-25" placeholder="Description">
+
+            <p th:errors="*{genreId}"></p>
+            <select th:field="*{genreId}" class="form-control mb-4 w-25">
+                <option value="-1">Select Genre</option>
+                <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+            </select>
+
+            <p th:errors="*{totalSeconds}"></p>
+            <input type="text" th:field="*{totalSeconds}"
+                   class="form-control mb-4 w-25" placeholder="Total seconds">
+
+            <p th:errors="*{streamingUrl}"></p>
+            <input type="text" th:field="*{streamingUrl}"
+                   class="form-control mb-4 w-25" placeholder="Streaming URL">
+
+            <p th:errors="*{imageId}"></p>
+            <!-- Gallery -->
+            <div class="row scrollable-gallery">
+                <div th:each="image : ${images}" class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+                    <img th:id="'image' + ${image.Id}"
+                         th:src="${image.content}"
+                         class="w-100 shadow-1-strong rounded mb-4"
+                         alt="Image"
+                         th:data-image-id="${image.Id}"
+                         th:data-image-content="${image.content}"
+                         onclick="handleImageClick(this)"
+                         style="cursor: pointer;" />
+                </div>
+            </div>
+            <!-- Gallery -->
+            <br>
+            <input type="text" id="tags" name="tags" class="form-control mb-4 w-25" placeholder="Tags (comma separated):"/>
+            <span th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}" class="error"></span>
+
+            <p th:text="${errorMessage}"></p>
+
+            <button type="submit" class="btn btn-info col-2">Save </button>
+
+            <br><br><br>
+
+        </form>
+        <br>
+        <br>
+        <a th:href="@{/videos/list}">Back to videos</a>
+    </div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="modalImage" class="img-fluid" src="" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- Footer-->
+<footer class="py-5 custom-gradient fixed-bottom">
+    <div class="container"><p class="m-0 text-center text-white">avuksan &copy; Streamify++ 2023</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+</body>
+</html>

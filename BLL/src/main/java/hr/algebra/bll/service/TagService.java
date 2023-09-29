@@ -11,6 +11,6 @@ public interface TagService {
     Tag save(Tag tag);
     void deleteById(int id);
     Tag findByName(String name);
-
     Tag findOrCreate(String name);
+    List<Tag> getByKeyword(String keyword);
 }

@@ -9,4 +9,5 @@ public interface CountryService {
     Country findById(int id);
     Country save(Country country);
     void deleteById(int id);
+    List<Country> getByKeyword(String keyword);
 }

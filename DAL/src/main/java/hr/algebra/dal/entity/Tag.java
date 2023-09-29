@@ -2,7 +2,8 @@ package hr.algebra.dal.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,8 @@ public class Tag {
     @Column(name="id")
     private int id;
 
-    @NotEmpty(message = "Name is required")
+    @NotNull(message="Name is required")
+    @Size(min=1, message="Name is required")
     @Column(name="name")
     private String name;
 

@@ -5,13 +5,16 @@ import hr.algebra.dal.dao.ImageRepository;
 import hr.algebra.dal.dao.VideoRepository;
 import hr.algebra.dal.entity.Genre;
 import hr.algebra.dal.entity.Image;
+import hr.algebra.dal.entity.Tag;
 import hr.algebra.dal.entity.Video;
 import hr.algebra.utils.notFoundErrors.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -59,6 +62,15 @@ public class VideoServiceImpl implements VideoService {
             throw new CustomNotFoundException(("Image id not found - " + video.getImageId()));
         }
         return _videoRepository.save(video);
+    }
+
+    @Override
+    public Set<Tag> getTagsForVideo(int id) {
+        Optional<Video> videoOpt = _videoRepository.findById(id);
+        if (videoOpt.isPresent()) {
+            return videoOpt.get().getTags();
+        }
+        return Collections.emptySet();
     }
 
     @Override
