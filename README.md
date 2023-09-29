@@ -40,6 +40,7 @@ https://www.baeldung.com/spring-data-repositories
 GUIDE:
 
 *******************************************************DAL**********************************************************************
+
 DATA ACCESS LAYER
 Creating a Model is pretty straightforward, you create a Model class and add the @Entity annotation,
 as for the ID,you need these 3 annotation 
@@ -67,7 +68,9 @@ ALSO DONT FORGET THE @REPOSITORY ANNOTATION(you will get a bean error,simmilair 
     }
 
 Thats it for the DAL
+
 **************************************************BLL*****************************************************************************
+
 BUSSINESS LOGIC LAYER
 Now you need to create an interface that will contain all CRUD operations you plan to use: 
 
