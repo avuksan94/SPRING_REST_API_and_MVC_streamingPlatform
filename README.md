@@ -43,14 +43,16 @@ GUIDE:
 DATA ACCESS LAYER
 Creating a Model is pretty straightforward, you create a Model class and add the @Entity annotation,
 as for the ID,you need these 3 annotation 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
 
 After you have created a class and added all needed annotation for validation and @Column for the properties you can create a Repository that extends the JPA Repository interface:
 ALSO DONT FORGET THE @REPOSITORY ANNOTATION(you will get a bean error,simmilair like the error in asp when you dont add a scopedService)
-@Repository
-public interface VideoRepository extends JpaRepository<Video, Integer> {
+
+    @Repository
+    public interface VideoRepository extends JpaRepository<Video, Integer> {
     //jpa gives us all the basic CRUD operations that we need
 
     //https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html
@@ -62,14 +64,14 @@ public interface VideoRepository extends JpaRepository<Video, Integer> {
     List<User> findByKeyword(@Param("keyword") String keyword);
 
     Lookup Defining Query Methods in Spring!
-}
+    }
 
 Thats it for the DAL
 **************************************************BLL*****************************************************************************
 BUSSINESS LOGIC LAYER
 Now you need to create an interface that will contain all CRUD operations you plan to use: 
 
-public interface VideoService {
+    public interface VideoService {
     List<Video> findAll();
     Video findById(int id);
     Video save(Video video);
@@ -77,12 +79,13 @@ public interface VideoService {
     <------------------------------- CRUD operations for JPA
   
     Set<Tag> getTagsForVideo(int id);   <----- my custom metod
-}
+    }
 
 
 After that we will create an Service implementation class: 
-@Service
-public class VideoServiceImpl implements VideoService {
+
+    @Service
+    public class VideoServiceImpl implements VideoService {
     private final VideoRepository _videoRepository;
     private final GenreRepository _genreRepository;
     private final ImageRepository _imageRepository;
